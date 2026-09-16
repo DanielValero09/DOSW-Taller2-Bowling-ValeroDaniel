@@ -37,16 +37,14 @@ public class BowlingGame {
      * Lanza IllegalStateException si el juego no esta completo.
      */
     public int score() {
-        // TODO: implementar con TDD
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     /**
      * true cuando los 10 frames han sido completados.
      */
     public boolean isComplete() {
-        // TODO: implementar con TDD
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     public List<Frame> getFrames() {
