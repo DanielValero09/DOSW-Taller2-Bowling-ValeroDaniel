@@ -23,7 +23,10 @@ public class BowlingGame {
      * Lanza IllegalStateException si el juego ya termino.
      */
     public void roll(int pins) {
-        // TODO: implementar con TDD
+        if (frames.isEmpty()) {
+            frames.add(new Frame());
+        }
+        frames.get(currentFrame).addRoll(pins);
     }
 
     /**
