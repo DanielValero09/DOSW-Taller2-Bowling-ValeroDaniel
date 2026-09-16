@@ -23,13 +23,17 @@ public class BowlingGame {
      * Lanza IllegalStateException si el juego ya termino.
      */
     public void roll(int pins) {
-        if (pins < 0 || pins > 10) {
-            throw new IllegalArgumentException();
-        }
+        validatePins(pins);
         if (frames.isEmpty()) {
             frames.add(new Frame());
         }
         frames.get(currentFrame).addRoll(pins);
+    }
+
+    private void validatePins(int pins) {
+        if (pins < 0 || pins > 10) {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
