@@ -1,11 +1,13 @@
 package src.test.java.edu.eci.dosw.bowling;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import src.main.java.edu.eci.dosw.bowling.BowlingGame;
 import src.main.java.edu.eci.dosw.bowling.Frame;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BowlingGameTest {
 
@@ -22,5 +24,13 @@ class BowlingGameTest {
         Frame frame = game.getFrames().getFirst();
         assertEquals(1, frame.getRolls().size());
         assertEquals(0, frame.getRolls().getFirst());
+    }
+
+    @Test
+    @DisplayName("A2: roll(-1) should throw IllegalArgumentException")
+    void rollNegativeOneShouldThrowIllegalArgumentException() {
+        BowlingGame game = new BowlingGame();
+
+        assertThrows(IllegalArgumentException.class, () -> game.roll(-1));
     }
 }
