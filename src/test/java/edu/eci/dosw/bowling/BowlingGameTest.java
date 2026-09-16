@@ -41,4 +41,14 @@ class BowlingGameTest {
 
         assertThrows(IllegalArgumentException.class, () -> game.roll(11));
     }
+
+    @Test
+    @DisplayName("A4: second roll should throw IllegalArgumentException when frame sum exceeds 10")
+    void secondRollShouldThrowIllegalArgumentExceptionWhenFrameSumExceedsTen() {
+        BowlingGame game = new BowlingGame();
+
+        game.roll(7);
+
+        assertThrows(IllegalArgumentException.class, () -> game.roll(6));
+    }
 }
