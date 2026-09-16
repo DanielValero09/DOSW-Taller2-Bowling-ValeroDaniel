@@ -27,7 +27,7 @@ public class BowlingGame {
         if (frames.isEmpty()) {
             frames.add(new Frame());
         }
-        validateFrameRoll(pins);
+        validateFramePins(pins);
         frames.get(currentFrame).addRoll(pins);
     }
 
@@ -37,7 +37,7 @@ public class BowlingGame {
         }
     }
 
-    private void validateFrameRoll(int pins) {
+    private void validateFramePins(int pins) {
         List<Integer> rolls = frames.get(currentFrame).getRolls();
         if (rolls.size() == 1 && rolls.getFirst() != 10 && rolls.getFirst() + pins > 10) {
             throw new IllegalArgumentException();
