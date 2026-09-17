@@ -23,7 +23,7 @@ main → develop → feature/ValeroDaniel_bowling
 
 ### BowlingGame
 
-Es el motor principal del juego. Registra los tiros con `roll()`, valida los pinos, administra los frames y delega el puntaje a `BowlingScorer` mediante `score()`. Actualmente permite tres tiros en el frame 10 cuando comienza con strike. El método `isComplete()` todavía está pendiente.
+Es el motor principal del juego. Registra los tiros con `roll()`, valida los pinos, administra los frames y delega el puntaje a `BowlingScorer` mediante `score()`. Permite el tiro bonus del frame 10 cuando hay spare o strike. Antes de calcular el puntaje, `score()` valida que el juego esté completo y lanza `IllegalStateException` si no lo está. El método `isComplete()` todavía está pendiente.
 
 ### Frame
 
@@ -42,7 +42,7 @@ Es un enum con los siguientes valores:
 
 ### BowlingScorer
 
-Calcula el puntaje a partir de los frames. Suma los pinos registrados y agrega los bonos de spare y strike trabajados en B1–B5.
+Calcula el puntaje a partir de los frames. Suma los pinos registrados y agrega los bonos de spare y strike. Los casos B1–B8 están implementados, incluyendo el juego completo de spares y el juego perfecto.
 
 `getSpareBonus(...)` obtiene el primer tiro del frame siguiente. `getStrikeBonus(...)` recorre los frames siguientes, toma los tiros en orden y retorna el bono al llegar a dos tiros. Así puede calcular el bono cuando hay dos strikes consecutivos.
 
@@ -81,8 +81,13 @@ Los hashes cortos y los mensajes de esta tabla se obtuvieron del historial del r
 | B3 | Agregar el bono de spare. | `83fd1da` test: RED - calcula bono de spare | `a1a79fe` feat: GREEN - implementa bono de spare | `97606f9` refactor: separa calculo de bono de spare | ✅ Implementado |
 | B4 | Agregar el bono de strike. | `4130eea` test: RED - calcula bono de strike | `87dfd54` feat: GREEN - implementa bono de strike | `a5a8b7d` refactor: separa calculo de bono de strike | ✅ Implementado |
 | B5 | Calcular el bono entre dos strikes consecutivos. | `0400444` test: RED - calcula strikes consecutivos | `843999e` feat: GREEN - calcula bono entre strikes consecutivos | No requerido | ✅ Implementado |
+| B6 | Obtener 150 con diez spares de 5 + 5 y un tiro bonus de 5. | `0dbffd8` test: RED - todos los spares obtienen 150 | `db1c59c` feat: GREEN - calcula juego completo con spares | `b9ad885` refactor: mejora manejo de spare en frame diez | ✅ Implementado |
+| B7 | Obtener 300 con 12 strikes. Prueba agregada en `dfc8656` — test: valida juego perfecto de 300 puntos. | No requerido: la prueba pasó con la lógica existente | No requerido | No requerido | ✅ Implementado |
+| B8 | Rechazar `score()` en un juego incompleto. | `73f1402` test: RED - score rechaza juego incompleto | `c13a4db` feat: GREEN - valida juego completo antes de calcular score | `8528778` refactor: separa validacion de juego completo para score | ✅ Implementado |
 
 En B5 se conservó `getStrikeBonus(...)`: la búsqueda de los dos tiros ya estaba encapsulada y no se encontró una mejora que justificara otro refactor.
+
+En B7, el commit `dfc8656` agregó la prueba de 12 strikes consecutivos. La prueba pasó directamente: el resultado de 300 surgió de la lógica general ya implementada. No fue necesario modificar código de producción ni realizar un ciclo RED, GREEN o REFACTOR para este caso.
 
 Además de los ciclos de la tabla, el historial incluye `03e1a08` — `chore: configura estructura inicial del proyecto Bowling` y `d329c64` — `chore: ajusta stubs para preservar flujo TDD`. Este último dejó `score()` e `isComplete()` lanzando `UnsupportedOperationException` mientras estaban pendientes. Más adelante, B1 implementó la delegación de `score()`.
 
@@ -129,6 +134,8 @@ Los ocho casos del módulo A están implementados y tienen una prueba cada uno.
 
 ### Módulo B - BowlingScorer
 
+**Estado del módulo B: COMPLETADO.**
+
 En los ejemplos de B3–B5, los frames restantes se completan con ceros.
 
 | Caso | Resultado |
@@ -138,9 +145,11 @@ En los ejemplos de B3–B5, los frames restantes se completan con ceros.
 | B3 | Implementado: un spare de 5 y 5, seguido de 3 y 0, da un puntaje de 16. |
 | B4 | Implementado: un strike seguido de 4 y 3 da un puntaje de 24. |
 | B5 | Implementado: dos strikes consecutivos seguidos de 5 y 0 dan un puntaje de 45. |
-| B6 | Pendiente. |
-| B7 | Pendiente. |
-| B8 | Pendiente. |
+| B6 | Implementado: diez spares de 5 + 5 y un tiro bonus final de 5 dan `score() == 150`. |
+| B7 | Implementado: 12 strikes consecutivos dan `score() == 300`. |
+| B8 | Implementado: después de un solo tiro de 5, `score()` lanza `IllegalStateException` porque el juego está incompleto. |
+
+Con el módulo B completo, `BowlingScorer` suma los tiros normales y calcula los bonos de spare, strike y strikes consecutivos, incluso cuando el bono atraviesa más de un frame. También soporta el juego completo de spares y el juego perfecto. La validación de `score()` en un juego incompleto se realiza en `BowlingGame`, antes de delegar el cálculo a `BowlingScorer`.
 
 ### Módulo C - BowlingGame.isComplete()
 
@@ -148,12 +157,13 @@ Estado: Pendiente.
 
 `isComplete()` todavía lanza `UnsupportedOperationException`. Los casos C1–C6 no están implementados ni tienen pruebas en el repositorio actual.
 
-### Trabajo pendiente
+### Próximos pasos
 
-- Desarrollar B6–B8 y el módulo C.
-- Agregar las capturas de consola del ciclo TDD.
+- Desarrollar los casos C1–C6 del módulo C.
 - Realizar la validación final de cobertura con JaCoCo. El comando `mvn test` ya ejecuta `prepare-agent` y `report` por la configuración del proyecto; la comprobación `check` está asociada a la fase `verify`. El reporte generado durante las pruebas no se presenta como la validación final.
 - Ejecutar SonarQube. El plugin está configurado, pero no hay resultados de un análisis documentados en el repositorio.
+- Agregar las evidencias finales, incluidas las capturas de consola del ciclo TDD.
+- Completar la reflexión técnica final; las preguntas 3 y 4 siguen pendientes.
 - Realizar el Pull Request final hacia `develop`. El historial revisado todavía mantiene `main` y `develop` en el commit inicial, sin la integración de la rama de trabajo.
 
 ## 7. Estado actual de las pruebas
@@ -166,17 +176,21 @@ mvn test
 
 | Resultado | Cantidad |
 | --- | --- |
-| Pruebas totales | 13 |
-| Pruebas exitosas | 13 |
+| Pruebas totales | 16 |
+| Pruebas exitosas | 16 |
 | Failures | 0 |
 | Errors | 0 |
-| Pruebas omitidas | 0 |
+| Pruebas omitidas (Skipped) | 0 |
 
-`BowlingGameTest` ejecutó 8 pruebas y `BowlingScorerTest` ejecutó 5. El resultado fue **BUILD SUCCESS**.
+`BowlingGameTest` ejecutó 8 pruebas y `BowlingScorerTest` ejecutó 8. El resultado fue **BUILD SUCCESS**.
 
 Resumen de la salida real:
 
 ```text
-[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
 ```
+
+## 8. Reflexión técnica
+
+La reflexión técnica final sigue pendiente. Las preguntas 3 y 4 se mantienen pendientes hasta contar con la validación final de JaCoCo y los resultados de SonarQube.
