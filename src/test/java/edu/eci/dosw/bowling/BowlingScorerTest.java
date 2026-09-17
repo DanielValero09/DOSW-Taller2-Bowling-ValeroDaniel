@@ -84,4 +84,19 @@ class BowlingScorerTest {
 
         assertEquals(45, game.score());
     }
+
+    @Test
+    @DisplayName("B6: ten spares with a final bonus roll of five should score 150")
+    void tenSparesWithFinalBonusRollOfFiveShouldScore150() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 10; i++) {
+            game.roll(5);
+            game.roll(5);
+        }
+
+        game.roll(5);
+
+        assertEquals(150, game.score());
+    }
 }
