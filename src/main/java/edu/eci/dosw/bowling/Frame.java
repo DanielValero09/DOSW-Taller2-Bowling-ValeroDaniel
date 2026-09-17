@@ -6,9 +6,11 @@ import java.util.List;
 public class Frame {
 
     private final List<Integer> rolls;
+    private FrameType type;
 
     public Frame() {
         this.rolls = new ArrayList<>();
+        this.type = FrameType.NORMAL;
     }
 
     public void addRoll(int pins) {
@@ -17,5 +19,13 @@ public class Frame {
 
     public List<Integer> getRolls() {
         return List.copyOf(rolls);
+    }
+
+    public FrameType getType() {
+        return type;
+    }
+
+    public void setType(FrameType type) {
+        this.type = type;
     }
 }

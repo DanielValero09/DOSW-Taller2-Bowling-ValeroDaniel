@@ -31,11 +31,15 @@ public class BowlingGame {
         validateFramePins(pins);
         Frame frame = frames.get(currentFrame);
         frame.addRoll(pins);
+        if (pins == 10) {
+            frame.setType(FrameType.STRIKE);
+        }
         advanceFrameIfComplete();
     }
 
     private void advanceFrameIfComplete() {
-        if (frames.get(currentFrame).getRolls().size() == 2) {
+        Frame frame = frames.get(currentFrame);
+        if (frame.getType() == FrameType.STRIKE || frame.getRolls().size() == 2) {
             currentFrame++;
         }
     }
