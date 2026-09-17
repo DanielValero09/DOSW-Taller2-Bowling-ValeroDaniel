@@ -31,4 +31,22 @@ class BowlingScorerTest {
 
         assertEquals(20, game.score());
     }
+
+    @Test
+    @DisplayName("B3: a spare should add the first roll of the next frame as a bonus")
+    void spareShouldAddFirstRollOfNextFrameAsBonus() {
+        BowlingGame game = new BowlingGame();
+
+        game.roll(5);
+        game.roll(5);
+
+        game.roll(3);
+        game.roll(0);
+
+        for (int i = 0; i < 16; i++) {
+            game.roll(0);
+        }
+
+        assertEquals(16, game.score());
+    }
 }
