@@ -19,4 +19,16 @@ class BowlingScorerTest {
 
         assertEquals(0, game.score());
     }
+
+    @Test
+    @DisplayName("B2: a game without strikes or spares should score the sum of pins")
+    void gameWithoutStrikesOrSparesShouldScoreSumOfPins() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 20; i++) {
+            game.roll(1);
+        }
+
+        assertEquals(20, game.score());
+    }
 }
