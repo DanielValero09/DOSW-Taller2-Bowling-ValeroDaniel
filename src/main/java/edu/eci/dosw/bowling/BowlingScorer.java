@@ -11,7 +11,7 @@ public class BowlingScorer {
             for (int pins : frame.getRolls()) {
                 score += pins;
             }
-            if (frame.getType() == FrameType.SPARE) {
+            if (i < 9 && frame.getType() == FrameType.SPARE) {
                 score += getSpareBonus(frames, i);
             }
             if (frame.getType() == FrameType.STRIKE) {
