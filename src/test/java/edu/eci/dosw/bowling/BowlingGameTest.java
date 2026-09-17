@@ -178,4 +178,26 @@ class BowlingGameTest {
         assertEquals(5, tenthFrame.getRolls().get(1));
         assertEquals(3, tenthFrame.getRolls().get(2));
     }
+
+    @Test
+    @DisplayName("C5: a game with a strike in the tenth frame and its two bonus rolls should be complete")
+    void gameWithTenthFrameStrikeAndTwoBonusRollsShouldBeComplete() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 18; i++) {
+            game.roll(0);
+        }
+
+        game.roll(10);
+        game.roll(3);
+        game.roll(4);
+
+        assertTrue(game.isComplete());
+        assertEquals(10, game.getFrames().size());
+        Frame tenthFrame = game.getFrames().get(9);
+        assertEquals(3, tenthFrame.getRolls().size());
+        assertEquals(10, tenthFrame.getRolls().get(0));
+        assertEquals(3, tenthFrame.getRolls().get(1));
+        assertEquals(4, tenthFrame.getRolls().get(2));
+    }
 }
