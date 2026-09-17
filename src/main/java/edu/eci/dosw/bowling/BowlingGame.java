@@ -33,8 +33,7 @@ public class BowlingGame {
         frame.addRoll(pins);
         if (isStrike(pins)) {
             frame.setType(FrameType.STRIKE);
-        } else if (frame.getRolls().size() == 2
-                && frame.getRolls().getFirst() + frame.getRolls().get(1) == 10) {
+        } else if (isSpare(frame)) {
             frame.setType(FrameType.SPARE);
         }
         advanceFrameIfComplete();
@@ -42,6 +41,11 @@ public class BowlingGame {
 
     private boolean isStrike(int pins) {
         return pins == 10;
+    }
+
+    private boolean isSpare(Frame frame) {
+        List<Integer> rolls = frame.getRolls();
+        return rolls.size() == 2 && rolls.getFirst() + rolls.get(1) == 10;
     }
 
     private void advanceFrameIfComplete() {
