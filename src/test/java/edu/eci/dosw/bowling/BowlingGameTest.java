@@ -97,4 +97,27 @@ class BowlingGameTest {
         Frame firstFrame = game.getFrames().getFirst();
         assertEquals(FrameType.SPARE, firstFrame.getType());
     }
+
+    @Test
+    @DisplayName("A8: tenth frame with strike should accept up to three rolls")
+    void tenthFrameWithStrikeShouldAcceptThreeRolls() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 18; i++) {
+            game.roll(0);
+        }
+
+        assertDoesNotThrow(() -> {
+            game.roll(10);
+            game.roll(3);
+            game.roll(4);
+        });
+
+        assertEquals(10, game.getFrames().size());
+        Frame tenthFrame = game.getFrames().get(9);
+        assertEquals(3, tenthFrame.getRolls().size());
+        assertEquals(10, tenthFrame.getRolls().get(0));
+        assertEquals(3, tenthFrame.getRolls().get(1));
+        assertEquals(4, tenthFrame.getRolls().get(2));
+    }
 }
