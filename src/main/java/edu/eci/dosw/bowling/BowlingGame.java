@@ -88,14 +88,18 @@ public class BowlingGame {
         }
     }
 
+    private void validateGameComplete() {
+        if (currentFrame != 10) {
+            throw new IllegalStateException();
+        }
+    }
+
     /**
      * Puntaje total.
      * Lanza IllegalStateException si el juego no esta completo.
      */
     public int score() {
-        if (currentFrame != 10) {
-            throw new IllegalStateException();
-        }
+        validateGameComplete();
         return new BowlingScorer().calculate(frames);
     }
 
