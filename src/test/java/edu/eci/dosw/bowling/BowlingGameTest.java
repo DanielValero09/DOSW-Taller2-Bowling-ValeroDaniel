@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BowlingGameTest {
 
@@ -141,5 +142,18 @@ class BowlingGameTest {
 
         assertEquals(9, game.getFrames().size());
         assertFalse(game.isComplete());
+    }
+
+    @Test
+    @DisplayName("C3: a game with ten completed normal frames should be complete")
+    void gameWithTenCompletedNormalFramesShouldBeComplete() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 20; i++) {
+            game.roll(0);
+        }
+
+        assertEquals(10, game.getFrames().size());
+        assertTrue(game.isComplete());
     }
 }
