@@ -15,8 +15,7 @@ public class BowlingScorer {
                 score += getSpareBonus(frames, i);
             }
             if (frame.getType() == FrameType.STRIKE) {
-                List<Integer> nextRolls = frames.get(i + 1).getRolls();
-                score += nextRolls.get(0) + nextRolls.get(1);
+                score += getStrikeBonus(frames, i);
             }
         }
         return score;
@@ -24,5 +23,10 @@ public class BowlingScorer {
 
     private int getSpareBonus(List<Frame> frames, int frameIndex) {
         return frames.get(frameIndex + 1).getRolls().get(0);
+    }
+
+    private int getStrikeBonus(List<Frame> frames, int frameIndex) {
+        List<Integer> nextRolls = frames.get(frameIndex + 1).getRolls();
+        return nextRolls.get(0) + nextRolls.get(1);
     }
 }
