@@ -85,4 +85,16 @@ class BowlingGameTest {
         assertEquals(1, nextFrame.getRolls().size());
         assertEquals(3, nextFrame.getRolls().getFirst());
     }
+
+    @Test
+    @DisplayName("A7: rolls of 5 and 5 should register a spare")
+    void rollsFiveAndFiveShouldRegisterSpare() {
+        BowlingGame game = new BowlingGame();
+
+        game.roll(5);
+        game.roll(5);
+
+        Frame firstFrame = game.getFrames().getFirst();
+        assertEquals(FrameType.SPARE, firstFrame.getType());
+    }
 }
