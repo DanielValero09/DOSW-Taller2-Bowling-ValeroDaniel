@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import src.main.java.edu.eci.dosw.bowling.BowlingGame;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BowlingScorerTest {
 
@@ -110,5 +111,15 @@ class BowlingScorerTest {
         }
 
         assertEquals(300, game.score());
+    }
+
+    @Test
+    @DisplayName("B8: scoring an incomplete game should throw IllegalStateException")
+    void scoringIncompleteGameShouldThrowIllegalStateException() {
+        BowlingGame game = new BowlingGame();
+
+        game.roll(5);
+
+        assertThrows(IllegalStateException.class, () -> game.score());
     }
 }
