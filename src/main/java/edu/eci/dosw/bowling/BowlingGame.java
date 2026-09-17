@@ -50,7 +50,7 @@ public class BowlingGame {
 
     private void advanceFrameIfComplete() {
         Frame frame = frames.get(currentFrame);
-        if (isTenthFrame() && (frame.getRolls().getFirst() == 10 || frame.getType() == FrameType.SPARE)) {
+        if (isTenthFrameWithBonus(frame)) {
             if (frame.getRolls().size() == 3) {
                 currentFrame++;
             }
@@ -59,6 +59,10 @@ public class BowlingGame {
         if (frame.getType() == FrameType.STRIKE || frame.getRolls().size() == 2) {
             currentFrame++;
         }
+    }
+
+    private boolean isTenthFrameWithBonus(Frame frame) {
+        return isTenthFrame() && (frame.getRolls().getFirst() == 10 || frame.getType() == FrameType.SPARE);
     }
 
     private boolean isTenthFrame() {
