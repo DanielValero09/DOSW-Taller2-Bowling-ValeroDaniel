@@ -156,4 +156,26 @@ class BowlingGameTest {
         assertEquals(10, game.getFrames().size());
         assertTrue(game.isComplete());
     }
+
+    @Test
+    @DisplayName("C4: a game with a spare in the tenth frame and its bonus roll should be complete")
+    void gameWithTenthFrameSpareAndBonusRollShouldBeComplete() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 18; i++) {
+            game.roll(0);
+        }
+
+        game.roll(5);
+        game.roll(5);
+        game.roll(3);
+
+        assertTrue(game.isComplete());
+        assertEquals(10, game.getFrames().size());
+        Frame tenthFrame = game.getFrames().get(9);
+        assertEquals(3, tenthFrame.getRolls().size());
+        assertEquals(5, tenthFrame.getRolls().get(0));
+        assertEquals(5, tenthFrame.getRolls().get(1));
+        assertEquals(3, tenthFrame.getRolls().get(2));
+    }
 }
