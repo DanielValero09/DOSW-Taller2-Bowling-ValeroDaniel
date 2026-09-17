@@ -107,7 +107,7 @@ public class BowlingGame {
      * true cuando los 10 frames han sido completados.
      */
     public boolean isComplete() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     public List<Frame> getFrames() {
