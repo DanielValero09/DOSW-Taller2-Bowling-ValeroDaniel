@@ -8,6 +8,7 @@ import src.main.java.edu.eci.dosw.bowling.FrameType;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BowlingGameTest {
@@ -119,5 +120,13 @@ class BowlingGameTest {
         assertEquals(10, tenthFrame.getRolls().get(0));
         assertEquals(3, tenthFrame.getRolls().get(1));
         assertEquals(4, tenthFrame.getRolls().get(2));
+    }
+
+    @Test
+    @DisplayName("C1: a newly created game should not be complete")
+    void newlyCreatedGameShouldNotBeComplete() {
+        BowlingGame game = new BowlingGame();
+
+        assertFalse(game.isComplete());
     }
 }
