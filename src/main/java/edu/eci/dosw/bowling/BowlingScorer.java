@@ -14,6 +14,10 @@ public class BowlingScorer {
             if (frame.getType() == FrameType.SPARE) {
                 score += getSpareBonus(frames, i);
             }
+            if (frame.getType() == FrameType.STRIKE) {
+                List<Integer> nextRolls = frames.get(i + 1).getRolls();
+                score += nextRolls.get(0) + nextRolls.get(1);
+            }
         }
         return score;
     }
