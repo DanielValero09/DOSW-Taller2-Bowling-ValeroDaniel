@@ -33,6 +33,9 @@ public class BowlingGame {
         frame.addRoll(pins);
         if (isStrike(pins)) {
             frame.setType(FrameType.STRIKE);
+        } else if (frame.getRolls().size() == 2
+                && frame.getRolls().getFirst() + frame.getRolls().get(1) == 10) {
+            frame.setType(FrameType.SPARE);
         }
         advanceFrameIfComplete();
     }
