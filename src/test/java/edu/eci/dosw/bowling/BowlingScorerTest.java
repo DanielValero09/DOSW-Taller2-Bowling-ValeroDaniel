@@ -99,4 +99,16 @@ class BowlingScorerTest {
 
         assertEquals(150, game.score());
     }
+
+    @Test
+    @DisplayName("B7: a perfect game should score 300")
+    void perfectGameShouldScore300() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 12; i++) {
+            game.roll(10);
+        }
+
+        assertEquals(300, game.score());
+    }
 }
