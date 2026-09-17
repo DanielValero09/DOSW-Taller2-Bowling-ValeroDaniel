@@ -24,11 +24,16 @@ public class BowlingGame {
      */
     public void roll(int pins) {
         validatePins(pins);
-        if (frames.isEmpty()) {
+        validateGameInProgress();
+        if (currentFrame == frames.size()) {
             frames.add(new Frame());
         }
         validateFramePins(pins);
-        frames.get(currentFrame).addRoll(pins);
+        Frame frame = frames.get(currentFrame);
+        frame.addRoll(pins);
+        if (frame.getRolls().size() == 2) {
+            currentFrame++;
+        }
     }
 
     private void validatePins(int pins) {
@@ -41,6 +46,12 @@ public class BowlingGame {
         List<Integer> rolls = frames.get(currentFrame).getRolls();
         if (rolls.size() == 1 && rolls.getFirst() != 10 && rolls.getFirst() + pins > 10) {
             throw new IllegalArgumentException();
+        }
+    }
+
+    private void validateGameInProgress() {
+        if (currentFrame == 10) {
+            throw new IllegalStateException();
         }
     }
 
