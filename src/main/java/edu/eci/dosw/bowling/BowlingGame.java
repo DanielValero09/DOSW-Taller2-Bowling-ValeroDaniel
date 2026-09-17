@@ -89,7 +89,7 @@ public class BowlingGame {
      * Lanza IllegalStateException si el juego no esta completo.
      */
     public int score() {
-        throw new UnsupportedOperationException();
+        return new BowlingScorer().calculate(frames);
     }
 
     /**
