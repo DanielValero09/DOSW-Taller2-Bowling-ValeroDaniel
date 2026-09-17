@@ -83,15 +83,19 @@ public class BowlingGame {
     }
 
     private void validateGameInProgress() {
-        if (currentFrame == 10) {
+        if (isGameComplete()) {
             throw new IllegalStateException();
         }
     }
 
     private void validateGameComplete() {
-        if (currentFrame != 10) {
+        if (!isGameComplete()) {
             throw new IllegalStateException();
         }
+    }
+
+    private boolean isGameComplete() {
+        return currentFrame == 10;
     }
 
     /**
@@ -107,7 +111,7 @@ public class BowlingGame {
      * true cuando los 10 frames han sido completados.
      */
     public boolean isComplete() {
-        return currentFrame == 10;
+        return isGameComplete();
     }
 
     public List<Frame> getFrames() {
