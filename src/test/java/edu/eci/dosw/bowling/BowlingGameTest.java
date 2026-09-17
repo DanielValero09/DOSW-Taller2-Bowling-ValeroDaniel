@@ -200,4 +200,21 @@ class BowlingGameTest {
         assertEquals(3, tenthFrame.getRolls().get(1));
         assertEquals(4, tenthFrame.getRolls().get(2));
     }
+    @Test
+    @DisplayName("C6: a perfect game with twelve consecutive strikes should be complete")
+    void perfectGameWithTwelveConsecutiveStrikesShouldBeComplete() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 12; i++) {
+            game.roll(10);
+        }
+
+        assertTrue(game.isComplete());
+        assertEquals(10, game.getFrames().size());
+        Frame tenthFrame = game.getFrames().get(9);
+        assertEquals(3, tenthFrame.getRolls().size());
+        assertEquals(10, tenthFrame.getRolls().get(0));
+        assertEquals(10, tenthFrame.getRolls().get(1));
+        assertEquals(10, tenthFrame.getRolls().get(2));
+    }
 }
