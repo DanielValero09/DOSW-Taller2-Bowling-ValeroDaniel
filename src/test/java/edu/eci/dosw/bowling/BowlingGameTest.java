@@ -129,4 +129,17 @@ class BowlingGameTest {
 
         assertFalse(game.isComplete());
     }
+
+    @Test
+    @DisplayName("C2: a game with nine completed normal frames should not be complete")
+    void gameWithNineCompletedNormalFramesShouldNotBeComplete() {
+        BowlingGame game = new BowlingGame();
+
+        for (int i = 0; i < 18; i++) {
+            game.roll(0);
+        }
+
+        assertEquals(9, game.getFrames().size());
+        assertFalse(game.isComplete());
+    }
 }
