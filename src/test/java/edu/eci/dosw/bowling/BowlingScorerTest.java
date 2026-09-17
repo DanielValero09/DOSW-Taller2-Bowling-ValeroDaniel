@@ -66,4 +66,22 @@ class BowlingScorerTest {
 
         assertEquals(24, game.score());
     }
+
+    @Test
+    @DisplayName("B5: consecutive strikes should correctly calculate the first strike bonus")
+    void consecutiveStrikesShouldCorrectlyCalculateFirstStrikeBonus() {
+        BowlingGame game = new BowlingGame();
+
+        game.roll(10);
+        game.roll(10);
+
+        game.roll(5);
+        game.roll(0);
+
+        for (int i = 0; i < 14; i++) {
+            game.roll(0);
+        }
+
+        assertEquals(45, game.score());
+    }
 }
