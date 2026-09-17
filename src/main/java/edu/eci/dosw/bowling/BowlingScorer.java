@@ -26,7 +26,17 @@ public class BowlingScorer {
     }
 
     private int getStrikeBonus(List<Frame> frames, int frameIndex) {
-        List<Integer> nextRolls = frames.get(frameIndex + 1).getRolls();
-        return nextRolls.get(0) + nextRolls.get(1);
+        int bonus = 0;
+        int rollsTaken = 0;
+        for (int i = frameIndex + 1; i < frames.size(); i++) {
+            for (int pins : frames.get(i).getRolls()) {
+                bonus += pins;
+                rollsTaken++;
+                if (rollsTaken == 2) {
+                    return bonus;
+                }
+            }
+        }
+        return bonus;
     }
 }
