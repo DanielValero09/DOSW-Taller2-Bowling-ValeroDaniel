@@ -49,4 +49,21 @@ class BowlingScorerTest {
 
         assertEquals(16, game.score());
     }
+
+    @Test
+    @DisplayName("B4: a strike should add the next two rolls as a bonus")
+    void strikeShouldAddNextTwoRollsAsBonus() {
+        BowlingGame game = new BowlingGame();
+
+        game.roll(10);
+
+        game.roll(4);
+        game.roll(3);
+
+        for (int i = 0; i < 16; i++) {
+            game.roll(0);
+        }
+
+        assertEquals(24, game.score());
+    }
 }
