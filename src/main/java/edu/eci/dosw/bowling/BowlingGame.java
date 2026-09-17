@@ -50,6 +50,12 @@ public class BowlingGame {
 
     private void advanceFrameIfComplete() {
         Frame frame = frames.get(currentFrame);
+        if (currentFrame == 9 && frame.getRolls().getFirst() == 10) {
+            if (frame.getRolls().size() == 3) {
+                currentFrame++;
+            }
+            return;
+        }
         if (frame.getType() == FrameType.STRIKE || frame.getRolls().size() == 2) {
             currentFrame++;
         }
