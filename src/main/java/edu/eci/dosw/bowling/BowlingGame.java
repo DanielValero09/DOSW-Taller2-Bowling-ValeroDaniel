@@ -50,7 +50,7 @@ public class BowlingGame {
 
     private void advanceFrameIfComplete() {
         Frame frame = frames.get(currentFrame);
-        if (currentFrame == 9 && frame.getRolls().getFirst() == 10) {
+        if (isTenthFrame() && frame.getRolls().getFirst() == 10) {
             if (frame.getRolls().size() == 3) {
                 currentFrame++;
             }
@@ -59,6 +59,10 @@ public class BowlingGame {
         if (frame.getType() == FrameType.STRIKE || frame.getRolls().size() == 2) {
             currentFrame++;
         }
+    }
+
+    private boolean isTenthFrame() {
+        return currentFrame == 9;
     }
 
     private void validatePins(int pins) {
