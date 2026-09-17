@@ -23,7 +23,7 @@ main → develop → feature/ValeroDaniel_bowling
 
 ### BowlingGame
 
-Es el motor principal del juego. Registra los tiros con `roll()`, valida los pinos, administra los frames y delega el puntaje a `BowlingScorer` mediante `score()`. Permite el tiro bonus del frame 10 cuando hay spare o strike. Antes de calcular el puntaje, `score()` valida que el juego esté completo y lanza `IllegalStateException` si no lo está. El método `isComplete()` todavía está pendiente.
+Es el motor principal del juego. Registra los tiros con `roll()`, valida los pinos, administra los frames y delega el puntaje a `BowlingScorer` mediante `score()`. Permite un tiro bonus del frame 10 cuando hay spare y dos cuando hay strike. Antes de calcular el puntaje, `score()` valida que el juego esté completo y lanza `IllegalStateException` si no lo está. El método `isComplete()` está implementado y comparte la validación de finalización con `roll()` y `score()`.
 
 ### Frame
 
@@ -84,10 +84,18 @@ Los hashes cortos y los mensajes de esta tabla se obtuvieron del historial del r
 | B6 | Obtener 150 con diez spares de 5 + 5 y un tiro bonus de 5. | `0dbffd8` test: RED - todos los spares obtienen 150 | `db1c59c` feat: GREEN - calcula juego completo con spares | `b9ad885` refactor: mejora manejo de spare en frame diez | ✅ Implementado |
 | B7 | Obtener 300 con 12 strikes. Prueba agregada en `dfc8656` — test: valida juego perfecto de 300 puntos. | No requerido: la prueba pasó con la lógica existente | No requerido | No requerido | ✅ Implementado |
 | B8 | Rechazar `score()` en un juego incompleto. | `73f1402` test: RED - score rechaza juego incompleto | `c13a4db` feat: GREEN - valida juego completo antes de calcular score | `8528778` refactor: separa validacion de juego completo para score | ✅ Implementado |
+| C1 | Juego recién creado: `isComplete() == false`. | `7a6880e` test: RED - juego nuevo no esta completo | `03ddb74` feat: GREEN - reporta juego inicial como incompleto | No requerido | ✅ Implementado |
+| C2 | Nueve frames completos: `isComplete() == false`. Prueba agregada en `4ff2148` — test: valida juego incompleto despues de nueve frames. | No requerido: prueba pasó con lógica existente | No requerido | No requerido | ✅ Implementado |
+| C3 | Diez frames normales completos: `isComplete() == true`. | `c662c9a` test: RED - diez frames normales completan juego | `40fda85` feat: GREEN - detecta final de juego normal | `99d96a1` refactor: reutiliza validacion de juego completo | ✅ Implementado |
+| C4 | Spare en frame 10 y tiro bonus: `isComplete() == true`. Prueba agregada en `719e29d` — test: valida juego completo tras bonus de spare. | No requerido: prueba pasó con lógica existente | No requerido | No requerido | ✅ Implementado |
+| C5 | Strike en frame 10 y dos tiros bonus: `isComplete() == true`. Prueba agregada en `2bc4ffc` — test: valida juego completo tras bonus de strike. | No requerido: prueba pasó con lógica existente | No requerido | No requerido | ✅ Implementado |
+| C6 | Juego perfecto después del strike número 12: `isComplete() == true`. Prueba agregada en `4aa0741` — test: valida finalizacion de juego perfecto. | No requerido: prueba pasó con lógica existente | No requerido | No requerido | ✅ Implementado |
 
 En B5 se conservó `getStrikeBonus(...)`: la búsqueda de los dos tiros ya estaba encapsulada y no se encontró una mejora que justificara otro refactor.
 
 En B7, el commit `dfc8656` agregó la prueba de 12 strikes consecutivos. La prueba pasó directamente: el resultado de 300 surgió de la lógica general ya implementada. No fue necesario modificar código de producción ni realizar un ciclo RED, GREEN o REFACTOR para este caso.
+
+En C2, C4, C5 y C6 las pruebas pasaron con la lógica existente. Sus commits únicamente agregan pruebas: no hubo RED real, GREEN nuevo ni REFACTOR. En C3, el refactor `99d96a1` extrajo `isGameComplete()` para compartir la condición de finalización entre `roll()`, `score()` e `isComplete()`.
 
 Además de los ciclos de la tabla, el historial incluye `03e1a08` — `chore: configura estructura inicial del proyecto Bowling` y `d329c64` — `chore: ajusta stubs para preservar flujo TDD`. Este último dejó `score()` e `isComplete()` lanzando `UnsupportedOperationException` mientras estaban pendientes. Más adelante, B1 implementó la delegación de `score()`.
 
@@ -118,6 +126,8 @@ Se tomó el caso A3, que verifica el límite máximo de pinos por tiro. La expli
 ## 6. Casos implementados
 
 ### Módulo A - BowlingGame.roll()
+
+**Estado del módulo A: COMPLETADO.**
 
 Los ocho casos del módulo A están implementados y tienen una prueba cada uno.
 
@@ -153,41 +163,90 @@ Con el módulo B completo, `BowlingScorer` suma los tiros normales y calcula los
 
 ### Módulo C - BowlingGame.isComplete()
 
-Estado: Pendiente.
+**Estado del módulo C: COMPLETADO.**
 
-`isComplete()` todavía lanza `UnsupportedOperationException`. Los casos C1–C6 no están implementados ni tienen pruebas en el repositorio actual.
+| Caso | Resultado |
+| --- | --- |
+| C1 | Implementado: un juego recién creado devuelve `false`. |
+| C2 | Implementado: nueve frames normales completos (18 tiros de cero) devuelven `false`. |
+| C3 | Implementado: diez frames normales completos (20 tiros de cero) devuelven `true`. |
+| C4 | Implementado: después de nueve frames de ceros, un spare de 5 + 5 en el frame 10 y un bonus de 3 devuelven `true`. |
+| C5 | Implementado: después de nueve frames de ceros, un strike en el frame 10 y dos bonus de 3 y 4 devuelven `true`. |
+| C6 | Implementado: un juego perfecto devuelve `true` después del strike número 12. |
+
+Con el módulo C completo, `isComplete()` permite distinguir un juego recién iniciado o con nueve frames, que sigue incompleto, de un juego normal de diez frames terminado. También reconoce la finalización del frame 10 con spare y su bonus, con strike y sus dos bonus, y del juego perfecto de doce strikes.
+
+### Estado general
+
+- Módulo A: COMPLETADO.
+- Módulo B: COMPLETADO.
+- Módulo C: COMPLETADO.
+- Desarrollo funcional: COMPLETADO.
+
+Pendiente: JaCoCo, pruebas adicionales derivadas de cobertura si son necesarias, SonarQube, evidencias finales (incluidas las capturas de consola del ciclo TDD), reflexión técnica final y Pull Request hacia `develop`. El historial revisado mantiene `main` y `develop` en el commit inicial, sin la integración de la rama de trabajo.
 
 ### Próximos pasos
 
-- Desarrollar los casos C1–C6 del módulo C.
-- Realizar la validación final de cobertura con JaCoCo. El comando `mvn test` ya ejecuta `prepare-agent` y `report` por la configuración del proyecto; la comprobación `check` está asociada a la fase `verify`. El reporte generado durante las pruebas no se presenta como la validación final.
-- Ejecutar SonarQube. El plugin está configurado, pero no hay resultados de un análisis documentados en el repositorio.
-- Agregar las evidencias finales, incluidas las capturas de consola del ciclo TDD.
-- Completar la reflexión técnica final; las preguntas 3 y 4 siguen pendientes.
-- Realizar el Pull Request final hacia `develop`. El historial revisado todavía mantiene `main` y `develop` en el commit inicial, sin la integración de la rama de trabajo.
+1. Ejecutar JaCoCo inicial.
+2. Guardar evidencia `jacoco-antes.png`.
+3. Revisar líneas y ramas sin cobertura.
+4. Agregar únicamente pruebas necesarias.
+5. Alcanzar line coverage >= 85%.
+6. Verificar branch coverage >= 70%.
+7. Guardar `jacoco-final.png`.
+8. Ejecutar SonarQube.
+9. Corregir issues relevantes.
+10. Completar reflexión técnica.
+11. Completar Pull Requests.
+12. Merge hacia `develop` mediante PR.
+
+### JaCoCo
+
+Estado: Pendiente de medición.
+
+Comando futuro (no ejecutado en esta revisión):
+
+```bash
+mvn clean verify
+```
+
+Objetivos: line coverage >= 85% y branch coverage >= 70%. Son metas, no resultados medidos. El POM configura `check` en la fase `verify` con un mínimo de líneas de 0.85; no configura un umbral automático de ramas, por lo que este objetivo queda pendiente de verificar.
+
+Evidencias pendientes:
+
+- `docs/evidence/jacoco-antes.png`
+- `docs/evidence/jacoco-final.png`
+
+El POM vincula `prepare-agent` y `report` al ciclo que alcanza `test`. Para esta revisión se omitieron mediante `-Djacoco.skip=true`; no se midió cobertura ni se crearon las evidencias.
+
+### SonarQube
+
+Estado: Pendiente.
+
+El plugin está configurado. No se ejecutó el análisis en esta revisión; Quality Gate, issues y métricas siguen pendientes.
 
 ## 7. Estado actual de las pruebas
 
-Se ejecutó el siguiente comando desde la raíz del proyecto antes de actualizar este README:
+Se ejecutó la fase `test` desde la raíz del proyecto, omitiendo JaCoCo para mantener pendiente la medición de cobertura:
 
 ```bash
-mvn test
+mvn test "-Djacoco.skip=true"
 ```
 
 | Resultado | Cantidad |
 | --- | --- |
-| Pruebas totales | 16 |
-| Pruebas exitosas | 16 |
+| Pruebas totales | 22 |
+| Pruebas exitosas | 22 |
 | Failures | 0 |
 | Errors | 0 |
 | Pruebas omitidas (Skipped) | 0 |
 
-`BowlingGameTest` ejecutó 8 pruebas y `BowlingScorerTest` ejecutó 8. El resultado fue **BUILD SUCCESS**.
+`BowlingGameTest` ejecutó 14 pruebas (A1–A8 y C1–C6) y `BowlingScorerTest` ejecutó 8 (B1–B8). El resultado fue **BUILD SUCCESS**.
 
 Resumen de la salida real:
 
 ```text
-[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
 ```
 
