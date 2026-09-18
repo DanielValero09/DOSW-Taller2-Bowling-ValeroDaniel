@@ -120,6 +120,6 @@ class BowlingScorerTest {
 
         game.roll(5);
 
-        assertThrows(IllegalStateException.class, () -> game.score());
+        assertThrows(IllegalStateException.class, game::score);
     }
 }
