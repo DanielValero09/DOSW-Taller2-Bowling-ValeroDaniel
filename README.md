@@ -186,10 +186,8 @@ Con el módulo C completo, `isComplete()` permite distinguir un juego recién in
 - Desarrollo funcional: COMPLETADO.
 - Calidad y cobertura: COMPLETADO.
 
-Pendiente únicamente:
-
-1. Pull Request hacia `develop`.
-2. Completar los datos del PR después del merge real.
+- Pull Request principal hacia `develop`: COMPLETADO (PR #1, merge el 17/09/2026).
+- Documentación del PR después del merge real: COMPLETADA.
 
 ### JaCoCo
 
@@ -311,8 +309,8 @@ SonarQube detectó la regla `java:S1612` en `BowlingScorerTest`. Se reemplazó `
 
 ## 9. Pull Requests
 
-El Pull Request hacia `develop` está pendiente. El enlace y la fecha se completarán después del merge real.
+El PR #1 integró `feature/ValeroDaniel_bowling` en `develop` el 17/09/2026, incluyendo los módulos A, B y C, JaCoCo, SonarQube, las evidencias y la documentación del taller.
 
 | PR | Fecha de merge | Módulo |
 |---|---|---|
-| Pendiente | Pendiente | Implementación TDD Bowling |
+| [PR #1](https://github.com/DanielValero09/DOSW-Taller2-Bowling-ValeroDaniel/pull/1) | 17/09/2026 | Implementación completa TDD Bowling: módulos A, B y C, JaCoCo y SonarQube |
