@@ -11,7 +11,7 @@
 
 Este proyecto implementa el motor de puntuación de un juego de Bowling para un jugador. Se desarrolla mediante TDD, agregando una prueba y el código necesario para cada caso. Un juego contiene 10 frames, donde se registran los pinos derribados en cada tiro.
 
-La descripción de BowlTech está pendiente de agregar: los archivos actuales del repositorio no contienen información sobre qué es.
+Los archivos actuales del repositorio no contienen una descripción de BowlTech.
 
 Las tecnologías configuradas en `pom.xml` son Java 24, Maven, JUnit 5.13.4, JaCoCo 0.8.15 y SonarQube Maven Plugin 5.7.0.6970.
 
@@ -121,7 +121,7 @@ Se tomó el caso A3, que verifica el límite máximo de pinos por tiro. La expli
 - `roll()` pasó a llamar ese método. La condición y la excepción se conservaron, dejando más clara la responsabilidad de validar el rango.
 - Commit: `ab3842c` — `refactor: extrae validacion de rango de pines`.
 
-> Capturas de consola RED y GREEN: pendientes de agregar en docs/evidence/.
+La evidencia de este ciclo corresponde a los commits descritos; no hay capturas de consola RED y GREEN en `docs/evidence/`.
 
 ## 6. Casos implementados
 
@@ -181,56 +181,97 @@ Con el módulo C completo, `isComplete()` permite distinguir un juego recién in
 - Módulo A: COMPLETADO.
 - Módulo B: COMPLETADO.
 - Módulo C: COMPLETADO.
+- JaCoCo: COMPLETADO.
+- SonarQube: COMPLETADO.
 - Desarrollo funcional: COMPLETADO.
+- Calidad y cobertura: COMPLETADO.
 
-Pendiente: JaCoCo, pruebas adicionales derivadas de cobertura si son necesarias, SonarQube, evidencias finales (incluidas las capturas de consola del ciclo TDD), reflexión técnica final y Pull Request hacia `develop`. El historial revisado mantiene `main` y `develop` en el commit inicial, sin la integración de la rama de trabajo.
+Pendiente únicamente:
 
-### Próximos pasos
-
-1. Ejecutar JaCoCo inicial.
-2. Guardar evidencia `jacoco-antes.png`.
-3. Revisar líneas y ramas sin cobertura.
-4. Agregar únicamente pruebas necesarias.
-5. Alcanzar line coverage >= 85%.
-6. Verificar branch coverage >= 70%.
-7. Guardar `jacoco-final.png`.
-8. Ejecutar SonarQube.
-9. Corregir issues relevantes.
-10. Completar reflexión técnica.
-11. Completar Pull Requests.
-12. Merge hacia `develop` mediante PR.
+1. Pull Request hacia `develop`.
+2. Completar los datos del PR después del merge real.
 
 ### JaCoCo
 
-Estado: Pendiente de medición.
+Estado: COMPLETADO.
 
-Comando futuro (no ejecutado en esta revisión):
+Comando utilizado:
 
 ```bash
 mvn clean verify
 ```
 
-Objetivos: line coverage >= 85% y branch coverage >= 70%. Son metas, no resultados medidos. El POM configura `check` en la fase `verify` con un mínimo de líneas de 0.85; no configura un umbral automático de ramas, por lo que este objetivo queda pendiente de verificar.
+Resultados iniciales y finales comprobados en las evidencias:
 
-Evidencias pendientes:
+| Métrica | Cobertura | Cubiertos / total |
+| --- | --- | --- |
+| Lines | 100% | 86/86 |
+| Branches | 100% | 60/60 |
+| Methods | 100% | 25/25 |
+| Classes | 100% | 4/4 |
+| Instructions | 100% | 408/408 |
 
-- `docs/evidence/jacoco-antes.png`
-- `docs/evidence/jacoco-final.png`
+Se cumplieron los requisitos del taller: line coverage >= 85% y branch coverage >= 70%. El POM verifica automáticamente el mínimo de líneas de 0.85 en `verify`; el cumplimiento de ramas se comprobó en el reporte.
 
-El POM vincula `prepare-agent` y `report` al ciclo que alcanza `test`. Para esta revisión se omitieron mediante `-Djacoco.skip=true`; no se midió cobertura ni se crearon las evidencias.
+La primera medición ya obtuvo 100% de líneas y ramas. No fue necesario agregar pruebas adicionales exclusivamente para aumentar la cobertura: los ciclos TDD previos ya ejercitaban todo el código existente.
+
+Evidencias: [JaCoCo inicial](docs/evidence/jacoco-antes.png) y [JaCoCo final](docs/evidence/jacoco-final.png).
 
 ### SonarQube
 
-Estado: Pendiente.
+Estado: COMPLETADO.
 
-El plugin está configurado. No se ejecutó el análisis en esta revisión; Quality Gate, issues y métricas siguen pendientes.
+Versión utilizada: `sonarqube:26.9.0.129388-community`.
+
+Resultados de Overall Code comprobados en las capturas del análisis inicial y final:
+
+| Métrica | Análisis inicial | Análisis final |
+| --- | --- | --- |
+| Quality Gate | Passed | Passed |
+| Coverage | 100% | 100% |
+| Security | 0 open issues, Rating A | 0 open issues, Rating A |
+| Reliability | 0 open issues, Rating A | 0 open issues, Rating A |
+| Maintainability | 1 open issue, Rating A | 0 open issues, Rating A |
+| Duplications | 0.0% | 0.0% |
+| Security Hotspots | 0 | 0 |
+
+El único issue detectado fue la regla `java:S1612` en `src/test/java/edu/eci/dosw/bowling/BowlingScorerTest.java`, con el mensaje: "Replace this lambda with method reference 'game::score'."
+
+Código anterior:
+
+```java
+assertThrows(
+    IllegalStateException.class,
+    () -> game.score()
+);
+```
+
+Corrección realizada en el commit `046d02e`:
+
+```java
+assertThrows(
+    IllegalStateException.class,
+    game::score
+);
+```
+
+La referencia al método simplificó el código sin modificar el comportamiento de la prueba. Después de la corrección se volvió a ejecutar:
+
+```bash
+mvn clean verify sonar:sonar
+```
+
+El análisis final mantuvo el Quality Gate en **Passed**, la cobertura en **100%** y dejó **0 issues abiertos** en seguridad, fiabilidad y mantenibilidad.
+
+Evidencias: [SonarQube inicial](docs/evidence/sonarqube-antes.png) y [SonarQube final](docs/evidence/sonarqube-final.png). Estos resultados corresponden al análisis ya realizado y guardado en el repositorio.
 
 ## 7. Estado actual de las pruebas
 
-Se ejecutó la fase `test` desde la raíz del proyecto, omitiendo JaCoCo para mantener pendiente la medición de cobertura:
+Se ejecutaron desde la raíz del proyecto las validaciones finales con JaCoCo habilitado:
 
 ```bash
-mvn test "-Djacoco.skip=true"
+mvn test
+mvn clean verify
 ```
 
 | Resultado | Cantidad |
@@ -241,7 +282,7 @@ mvn test "-Djacoco.skip=true"
 | Errors | 0 |
 | Pruebas omitidas (Skipped) | 0 |
 
-`BowlingGameTest` ejecutó 14 pruebas (A1–A8 y C1–C6) y `BowlingScorerTest` ejecutó 8 (B1–B8). El resultado fue **BUILD SUCCESS**.
+`BowlingGameTest` ejecutó 14 pruebas (A1–A8 y C1–C6) y `BowlingScorerTest` ejecutó 8 (B1–B8). Ambos comandos finalizaron con **BUILD SUCCESS**, y `mvn clean verify` verificó el umbral configurado de JaCoCo.
 
 Resumen de la salida real:
 
@@ -252,4 +293,26 @@ Resumen de la salida real:
 
 ## 8. Reflexión técnica
 
-La reflexión técnica final sigue pendiente. Las preguntas 3 y 4 se mantienen pendientes hasta contar con la validación final de JaCoCo y los resultados de SonarQube.
+### 1. ¿Qué caso edge del Bowling fue el más difícil de implementar con TDD y por qué?
+
+El frame 10 fue el caso más delicado porque no sigue exactamente las mismas reglas que los primeros nueve. Hubo que manejar el juego normal, el spare con un tiro bonus y el strike con dos tiros bonus, además de comprobar el juego perfecto. Las pruebas permitieron revisar tanto el puntaje como el momento en que termina el juego.
+
+### 2. ¿Qué parte del código cambió durante REFACTOR sin modificar el comportamiento observable?
+
+En `ab3842c` se extrajo `validatePins(int pins)` para separar la validación del rango de pinos, conservando la condición y la excepción. En `99d96a1` se extrajo `isGameComplete()` para reutilizar la condición de finalización en `roll()`, `score()` e `isComplete()`. Estos cambios organizaron mejor el código sin cambiar sus resultados.
+
+### 3. ¿Qué casos de prueba descubriste al revisar el reporte de cobertura de JaCoCo que no habían considerado antes?
+
+La medición inicial ya mostró 100% de cobertura de líneas y ramas, por lo que no fue necesario agregar pruebas exclusivamente por cobertura. Los ciclos TDD desarrollados previamente ya ejercitaban todo el código existente. Sin embargo, 100% de cobertura no significa que todas las combinaciones posibles del dominio estén necesariamente probadas.
+
+### 4. ¿Qué hallazgo de SonarQube produjo un cambio real en el código?
+
+SonarQube detectó la regla `java:S1612` en `BowlingScorerTest`. Se reemplazó `() -> game.score()` por `game::score` en la prueba de puntaje de un juego incompleto. Fue un cambio de mantenibilidad que simplificó el código sin cambiar su comportamiento; el análisis final quedó sin issues abiertos de mantenibilidad.
+
+## 9. Pull Requests
+
+El Pull Request hacia `develop` está pendiente. El enlace y la fecha se completarán después del merge real.
+
+| PR | Fecha de merge | Módulo |
+|---|---|---|
+| Pendiente | Pendiente | Implementación TDD Bowling |
